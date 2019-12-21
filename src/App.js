@@ -12,24 +12,24 @@ import Total from './components/Total';
 const App = (props) => {
   console.log(props);
    
-  const removeFeature = item => {
+  const removeItem = item => {
     // dispatch an action here to remove an item
-
+    props.removeFeature(item);
   };
 
   const buyItem = item => {
     // dipsatch an action here to add an item
-      
+    props.addFeature(item);
   };
 
   return (
     <div className="boxes">
       <div className="box">
         <Header car={props.car} />
-        <AddedFeatures car={props.car} />
+        <AddedFeatures removeFeature={removeItem} car={props.car} />
       </div>
       <div className="box">
-        <AdditionalFeatures additionalFeatures={props.additionalFeatures} />
+        <AdditionalFeatures buyItem={buyItem} additionalFeatures={props.additionalFeatures} />
         <Total car={props.car} additionalPrice={props.additionalPrice} />
       </div>
     </div>
@@ -38,6 +38,7 @@ const App = (props) => {
 
 //mapStateToProps is a function that we define.
 //It enables us to render the state as props in the App component
+//What you return are all the key value pairs in the initial state from the reducer
 
 const mapStateToProps = state => {
   console.log(state);
@@ -50,8 +51,8 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps,
-   {}
+   {addFeature, removeFeature}
 )(App);
 
 //connect gets called twice
-//the first call takes in a function (usually mapStateToProps), and an object
+//the first call takes in a function (usually mapStateToProps), and an object that holds our action creaters and passes them on to props as well
