@@ -6,24 +6,12 @@ import AddedFeatures from './components/AddedFeatures';
 import AdditionalFeatures from './components/AdditionalFeatures';
 import Total from './components/Total';
 
-const App = () => {
-   const state = {
-    additionalPrice: 0,
-    car: {
-      price: 26395,
-      name: '2019 Ford Mustang',
-      image:
-        'https://cdn.motor1.com/images/mgl/0AN2V/s1/2019-ford-mustang-bullitt.jpg',
-      features: []
-    },
-    additionalFeatures: [
-      { id: 1, name: 'V-6 engine', price: 1500 },
-      { id: 2, name: 'Racing detail package', price: 1500 },
-      { id: 3, name: 'Premium sound system', price: 500 },
-      { id: 4, name: 'Rear spoiler', price: 250 }
-    ]
-  }; 
 
+//Step 2. Connect a component to the store to access state properties. See import section and the bottom page of this file
+
+const App = (props) => {
+  console.log(props);
+   
   const removeFeature = item => {
     // dispatch an action here to remove an item
 
@@ -37,26 +25,33 @@ const App = () => {
   return (
     <div className="boxes">
       <div className="box">
-        <Header car={state.car} />
-        <AddedFeatures car={state.car} />
+        <Header car={props.car} />
+        <AddedFeatures car={props.car} />
       </div>
       <div className="box">
-        <AdditionalFeatures additionalFeatures={state.additionalFeatures} />
-        <Total car={state.car} additionalPrice={state.additionalPrice} />
+        <AdditionalFeatures additionalFeatures={props.additionalFeatures} />
+        <Total car={props.car} additionalPrice={props.additionalPrice} />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
+//mapStateToProps is a function that we define.
+//It enables us to render the state as props in the App component
+
+const mapStateToProps = state => {
+  console.log(state);
   return {
-    state
+    car: state.car,
+    additionalPrice: state.additionalPrice,
+    features: state.car.features,
+    additionalFeatures: state.additionalFeatures
   }
 }
 
-const mapDispatchToProps = {
-  addFeature: addFeature,
-  removeFeature: removeFeature
-}
+export default connect(mapStateToProps,
+   {}
+)(App);
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+//connect gets called twice
+//the first call takes in a function (usually mapStateToProps), and an object
